@@ -15,7 +15,7 @@ def menu():
     print("3: remove")
     print("4: exit")
 
-def list:
+def list():
     file = Path("dict.json")
     with open(file, "r") as todo
     data = json.load(todo)
