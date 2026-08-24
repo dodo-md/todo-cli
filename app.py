@@ -17,8 +17,8 @@ def menu():
 
 def list():
     file = Path("dict.json")
-    with open(file, "r") as todo
-    data = json.load(todo)
+    with open(file, "r") as todo:
+        data = json.load(todo)
     print(data)
 def add():
 
