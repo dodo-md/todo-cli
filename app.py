@@ -36,20 +36,24 @@ class TodoApp:
         file = Path("dict.json")
         with open(file, "r") as f:
             self.data = json.load(f)
-            print(self.data)
-            useri = input("which task do you want to delete?: ")
+        print(self.data)
+        useri = input("which task do you want to delete?: ")
+
+        try:
+            useri = int(useri)
+        except ValueError:
+            print(f"wrong format: {useri}")
+            return
 
         for i, task in enumerate(self.data["tasks"]):
-            try:
-                if task["id"] == int(useri):
-                    self.data["tasks"].pop(i)
-                    break
-                else:
-                    print(f"wrong id: {useri}")
-                with open(file, "w") as f:
-                    json.dump(self.data, f)
-            except ValueError:
-                print(f"wrong format: {useri}")
+            if task["id"] == useri:
+                self.data["tasks"].pop(i)
+                break
+        else:
+            print(f"wrong id: {useri}")
+
+        with open(file, "w") as f:
+            json.dump(self.data, f)
 
 if __name__ == "__main__":
     app = TodoApp()
