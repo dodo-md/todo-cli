@@ -1,43 +1,69 @@
 from pathlib import Path
 import json
 
-data = []
+class TodoApp:
+    def __init__(self):
+        file = Path("dict.json")
+        if not file.exists():
+            self.write = {"tasks": []}
+            with open(file, "w") as f:
+                data = json.dump(self.write, f)
 
-def __init__():
-    file = Path("dict.json")
-    if not file.exists():
-        with open(file, "w") as jsof:
-            json.dump(data, jsof)
+    def menu(self):
+        print("1: list")
+        print("2: add")
+        print("3: remove")
+        print("4: exit")
 
-def menu():
-    print("1: list")
-    print("2: add")
-    print("3: remove")
-    print("4: exit")
+    def list(self):
+        file = Path("dict.json")
+        with open(file, "r") as f:
+            self.data = json.load(f)
+            print(self.data)
 
-def list():
-    file = Path("dict.json")
-    with open(file, "r") as todo:
-        data = json.load(todo)
-    print(data)
+    def add(self):
+        file = Path("dict.json")
+        useri = input("what do you want to add?: ")
+        with open(file, "r") as f:
+            self.data = json.load(f)
+            add_todo = {"id": len(self.data["tasks"]) + 1, "title": useri}
+            self.data["tasks"].append(add_todo)
 
-def add():
-    print("we dont have ts")
+            with open(file, "w") as f:
+                json.dump(self.data, f)
 
-def remove():
-    print("we dont have ts rn")
+    def remove(self):
+        file = Path("dict.json")
+        with open(file, "r") as f:
+            self.data = json.load(f)
+            print(self.data)
+            useri = input("which task do you want to delete?: ")
 
-while True:
-    menu()
-    choice = input("enter your choice: ")
+        for i, task in enumerate(self.data["tasks"]):
+            try:
+                if task["id"] == int(useri):
+                    self.data["tasks"].pop(i)
+                    break
+                else:
+                    print(f"wrong id: {useri}")
+                with open(file, "w") as f:
+                    json.dump(self.data, f)
+            except ValueError:
+                print(f"wrong format: {useri}")
 
-    if choice == "1":
-        list()
-    elif choice == "2":
-        print("we don't have that rn my nigga")
-    elif choice == "3":
-        print("we don't have that rn bluddy")
-    elif choice == "4":
-        break
-    else:
-        print(f"invalid choice: {choice}")
+if __name__ == "__main__":
+    app = TodoApp()
+
+    while True:
+        app.menu()
+        choice = input("enter your choice: ")
+        if choice == "1":
+            app.list()
+        elif choice == "2":
+            app.add()
+        elif choice == "3":
+            app.remove()
+        elif choice == "4":
+            break
+        else:
+            print(f"invalid choice: {choice}")
