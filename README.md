@@ -48,7 +48,6 @@ Enter the number of the action you want to perform and follow the prompts.
 ```
 todo-cli/
 ├── app.py          # Main application logic (TodoApp class)
-├── main.py         # Entry point
 ├── dict.json        # Local task storage (auto-generated)
 └── pyproject.toml   # Project metadata
 ```
