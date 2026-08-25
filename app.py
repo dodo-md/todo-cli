@@ -1,13 +1,16 @@
 from pathlib import Path
 import json
+import keyboard
+import os
 
 class TodoApp:
     def __init__(self):
         file = Path("dict.json")
-        if not file.exists():
+
+        if not file.exists() or file.stat().st_size == 0:
             self.write = {"tasks": []}
             with open(file, "w") as f:
-                data = json.dump(self.write, f)
+                json.dump(self.write, f)
 
     def menu(self):
         print("1: list")
@@ -15,28 +18,38 @@ class TodoApp:
         print("3: remove")
         print("4: exit")
 
+    def clear(self):
+        os.system("cls" if os.name == "nt" else "clear")
+
     def list(self):
+        self.clear()
         file = Path("dict.json")
         with open(file, "r") as f:
             self.data = json.load(f)
-            print(self.data)
+
+        for task in self.data["tasks"]:
+            print(f"[{task['id']}] {task['title']}")
 
     def add(self):
         file = Path("dict.json")
-        useri = input("what do you want to add?: ")
+        self.list()
+        useri = input("\nwhat do you want to add?: ")
         with open(file, "r") as f:
             self.data = json.load(f)
             add_todo = {"id": len(self.data["tasks"]) + 1, "title": useri}
             self.data["tasks"].append(add_todo)
 
             with open(file, "w") as f:
-                json.dump(self.data, f)
+                if useri == "":
+                    return
+                else:
+                    json.dump(self.data, f)
 
     def remove(self):
         file = Path("dict.json")
         with open(file, "r") as f:
             self.data = json.load(f)
-        print(self.data)
+        self.list()
         useri = input("which task do you want to delete?: ")
 
         try:
@@ -59,15 +72,18 @@ if __name__ == "__main__":
     app = TodoApp()
 
     while True:
+        app.clear()
         app.menu()
         choice = input("enter your choice: ")
         if choice == "1":
             app.list()
+            input("\npress enter to continue..")
         elif choice == "2":
             app.add()
         elif choice == "3":
             app.remove()
         elif choice == "4":
+            app.clear()
             break
         else:
             print(f"invalid choice: {choice}")
