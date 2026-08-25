@@ -66,7 +66,7 @@ class TodoApp:
             with open(file, "w") as f:
                 json.dump(self.write, f)
         self.list()
-        useri = input("which task do you want to delete?: ")
+        useri = input("\nwhich task do you want to delete?: ")
 
         try:
             useri = int(useri)
