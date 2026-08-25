@@ -24,8 +24,13 @@ class TodoApp:
     def list(self):
         self.clear()
         file = Path("dict.json")
-        with open(file, "r") as f:
-            self.data = json.load(f)
+        try:
+            with open(file, "r") as f:
+                self.data = json.load(f)
+        except:
+            self.write = {"tasks": []}
+            with open(file, "w") as f:
+                json.dump(self.write, f)
 
         for task in self.data["tasks"]:
             print(f"[{task['id']}] {task['title']}")
@@ -33,22 +38,33 @@ class TodoApp:
     def add(self):
         file = Path("dict.json")
         self.list()
-        useri = input("\nwhat do you want to add?: ")
-        with open(file, "r") as f:
-            self.data = json.load(f)
-            add_todo = {"id": len(self.data["tasks"]) + 1, "title": useri}
-            self.data["tasks"].append(add_todo)
+        try:
+            with open(file, "r") as f:
+                self.data = json.load(f)
+                add_todo = {"id": len(self.data["tasks"]) + 1, "title": useri}
+                self.data["tasks"].append(add_todo)
 
+                with open(file, "w") as f:
+                    if useri == "":
+                        return
+                    else:
+                        json.dump(self.data, f)
+        except:
+            self.write = {"tasks": []}
             with open(file, "w") as f:
-                if useri == "":
-                    return
-                else:
-                    json.dump(self.data, f)
+                json.dump(self.write, f)
+
+        useri = input("\nwhat do you want to add?: ")
 
     def remove(self):
         file = Path("dict.json")
-        with open(file, "r") as f:
-            self.data = json.load(f)
+        try:
+            with open(file, "r") as f:
+                self.data = json.load(f)
+        except:
+            self.write = {"tasks": []}
+            with open(file, "w") as f:
+                json.dump(self.write, f)
         self.list()
         useri = input("which task do you want to delete?: ")
 
