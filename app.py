@@ -38,23 +38,23 @@ class TodoApp:
     def add(self):
         file = Path("dict.json")
         self.list()
+
+        useri = input("\nwhat do you want to add?: ")
         try:
             with open(file, "r") as f:
                 self.data = json.load(f)
-                add_todo = {"id": len(self.data["tasks"]) + 1, "title": useri}
-                self.data["tasks"].append(add_todo)
 
-                with open(file, "w") as f:
-                    if useri == "":
-                        return
-                    else:
-                        json.dump(self.data, f)
-        except:
-            self.write = {"tasks": []}
+            add_todo = {"id": len(self.data["tasks"]) + 1, "title": useri}
+            self.data["tasks"].append(add_todo)
+
             with open(file, "w") as f:
-                json.dump(self.write, f)
-
-        useri = input("\nwhat do you want to add?: ")
+                json.dump(self.data, f)
+        except Exception as e:
+            print(f"dict.json was empty, so created tasks inside dict.json again! error: {e}")
+            if not self.data["tasks"]:
+                self.write = {"tasks": []}
+                with open(file, "w") as f:
+                    json.dump(self.write, f)
 
     def remove(self):
         file = Path("dict.json")
